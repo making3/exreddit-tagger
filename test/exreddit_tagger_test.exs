@@ -3,13 +3,12 @@ defmodule ExRedditTaggerTest do
   doctest ExRedditTagger
 
   test "test run" do
-    token = ExReddit.OAuth.get_token()
-    IO.puts token
+    {:ok, token} = ExReddit.OAuth.get_token()
 
     sub = "learnprogramming"
     tags = ["array", "list", "method", "scanf", "class", "api", "post"]
     ExRedditTagger.get_new_thread_tags(sub, token, tags)
       |> Stream.map(&IO.inspect(&1))
-      |> Stream.run
+      |> Enum.take(5)
   end
 end

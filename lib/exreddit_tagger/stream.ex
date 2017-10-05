@@ -3,7 +3,6 @@ defmodule ExRedditTagger.Stream do
   def fetch_new_threads_perpertually(token, sub) do
     Stream.resource(
       fn -> nil end,
-      # TODO: Get only newest threads. This starts at the newest and goes oldest.
       fn before_id ->
         :timer.sleep 1000
         fetch_new_threads(token, sub, before_id)

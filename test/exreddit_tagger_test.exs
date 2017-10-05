@@ -10,8 +10,9 @@ defmodule ExRedditTaggerTest do
 
     sub = "askreddit"
     tags = ["what", "how", "when", "who", "why"]
+
     ExRedditTagger.get_new_thread_tags(sub, token, tags)
-      |> Stream.map(&IO.inspect(&1))
-      |> Stream.run()
+    |> Stream.map(&IO.inspect(&1))
+    |> Stream.run()
   end
 end

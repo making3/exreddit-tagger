@@ -1,5 +1,3 @@
-# TODO: Parse title
-
 defmodule ExRedditTagger do
   def get_new_thread_tags(sub, token, tags) do
     ExRedditTagger.Stream.fetch_new_threads_perpertually(token, sub)
@@ -14,8 +12,8 @@ defmodule ExRedditTagger do
 
   defp parse_tags(thread, tags) do
     body_result = get_tags_from_map(thread, "selftext", tags)
-    title_result = get_tags_from_map(thread, "title", tags)
-    Enum.concat(title_result, body_result)
+    get_tags_from_map(thread, "title", tags)
+    |> Enum.concat(body_result)
   end
 
   defp get_tags_from_map(thread, property, tags) do

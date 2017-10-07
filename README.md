@@ -4,14 +4,21 @@ Parses new reddit threads to find specific tags in the title or body.
 
 ## Installation
 
-Until further development, add the following to Hex:
+Add the following to Hex:
 
 ```elixir
+def application do
+  [
+    applications: [:exreddit]
+  ]
+end
+
 def deps do
   [
     {:exreddit_tagger, git: "https://github.com/making3/exreddit_tagger.git", branch: "master"}
   ]
 end
+
 ```
 
 Then run `mix deps.get`.

@@ -7,3 +7,7 @@ config :exreddit,
   password: System.get_env("REDDIT_PASS"),
   client_id: System.get_env("REDDIT_CLIENT_ID"),
   secret: System.get_env("REDDIT_SECRET")
+
+
+config :exreddit_tagger,
+  fetch_timeout: 1000

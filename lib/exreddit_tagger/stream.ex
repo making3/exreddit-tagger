@@ -4,7 +4,7 @@ defmodule ExRedditTagger.Stream do
     Stream.resource(
       fn -> nil end,
       fn before_id ->
-        :timer.sleep 1000
+        :timer.sleep Application.get_env(:exreddit_tagger, :fetch_timeout)
         fetch_new_threads(token, sub, before_id)
       end,
       fn _ -> true end

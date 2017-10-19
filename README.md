@@ -28,7 +28,9 @@ Then run `mix deps.get`.
 Configuration includes ExReddit settings (reddit api settings) and the below:
 
     config :exreddit_tagger,
-      fetch_timeout: 1000
+      fetch_timeout: 1000,
+      initial_threads_to_fetch: 25, # Number of threads to fetch the first time when grabbing new_threads
+      threads_to_fetch: 2 # Number of threads to fetch when grabbing new_threads
 
 ## Usage
 

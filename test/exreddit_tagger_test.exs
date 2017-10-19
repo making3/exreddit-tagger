@@ -8,7 +8,7 @@ defmodule ExRedditTaggerTest do
     # sub = "learnprogramming"
     # tags = ["array", "list", "method", "scanf", "class", "api", "post"]
 
-    sub = "learnprogramming"
+    sub = "askreddit"
     tags = ["what", "how", "when", "who", "why"]
 
     ExRedditTagger.get_new_thread_tags(sub, token, tags)

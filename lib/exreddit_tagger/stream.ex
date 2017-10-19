@@ -1,37 +1,49 @@
 defmodule ExRedditTagger.Stream do
-  # TODO: Allow user to pass in a starting thread id
   def fetch_new_threads_perpertually(token, sub) do
     Stream.resource(
-      fn -> nil end,
-      fn before_id ->
+      fn -> [] end,
+      fn previous_thread_ids ->
         :timer.sleep Application.get_env(:exreddit_tagger, :fetch_timeout)
-        fetch_new_threads(token, sub, before_id)
+        fetch_new_threads(token, sub, previous_thread_ids)
       end,
       fn _ -> true end
     )
   end
 
-  defp fetch_new_threads(token, sub, nil) do
-    {:ok, result} = ExReddit.Api.Subreddit.get_new_threads(token, sub)
-    get_stream_fetch_result(result, nil)
+  defp fetch_new_threads(token, sub, []) do
+    limit = Application.get_env(:exreddit_tagger, :initial_threads_to_fetch)
+    fetch_new_threads(token, sub, [], limit)
   end
-  defp fetch_new_threads(token, sub, before_id) do
-    {:ok, result} = ExReddit.Api.Subreddit.get_new_threads(token, sub, [before: before_id])
-    get_stream_fetch_result(result, before_id)
+  defp fetch_new_threads(token, sub, previous_thread_ids) do
+    limit = Application.get_env(:exreddit_tagger, :threads_to_fetch)
+    fetch_new_threads(token, sub, previous_thread_ids, limit)
   end
 
-  defp get_stream_fetch_result(result, before_id) do
+  defp fetch_new_threads(token, sub, previous_thread_ids, limit) do
+    {:ok, result} = ExReddit.Api.Subreddit.get_new_threads(token, sub, [limit: limit])
     children = Map.get(result, "children")
-    new_before_id = children |> List.first() |> get_before_id(before_id)
-    {children, new_before_id}
+
+    thread_ids = get_thread_ids(children)
+    only_new_threads = filter_previous_threads(children, previous_thread_ids)
+    {only_new_threads, thread_ids}
   end
 
-  defp get_before_id(nil, default) do
-    default
+  defp filter_previous_threads(threads, previous_thread_ids) do
+    Enum.filter(threads, &is_new_thread(&1, previous_thread_ids))
   end
-  defp get_before_id(data, _) do
-    data
+
+  defp get_thread_ids(children) do
+    Enum.map(children, &get_thread_id(&1))
+  end
+
+  defp get_thread_id(thread) do
+    thread
     |> Map.get("data")
-    |> Map.get("name")
+    |> Map.get("id")
+  end
+
+  defp is_new_thread(thread, previous_threads_ids) do
+    thread_id = get_thread_id(thread)
+    Enum.member?(previous_threads_ids, thread_id) == false
   end
 end

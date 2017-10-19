@@ -8,7 +8,7 @@ defmodule ExRedditTagger do
 
   defp parse_thread(thread, tags) do
     found_tags = parse_tags(thread, tags)
-    {Map.get(thread, "id"), found_tags}
+    {thread, found_tags}
   end
 
   defp parse_tags(thread, tags) do

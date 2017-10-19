@@ -12,12 +12,12 @@ defmodule ExRedditTaggerTest do
     tags = ["what", "how", "when", "who", "why"]
 
     ExRedditTagger.get_new_thread_tags(sub, token, tags)
-    |> Stream.map(fn({thread, tags}) -> {Map.get(thread, "title"), tags } end)
+    |> Stream.map(fn({thread, tags}) -> {Map.get(thread, "title"), tags} end)
     |> Stream.map(&IO.inspect(&1))
     |> Enum.take(20)
 
     ExRedditTagger.get_new_thread_tags(sub, token, tags, true)
-    |> Stream.map(fn ({thread, tags}) -> {Map.get(thread, "title"), tags } end)
+    |> Stream.map(fn ({thread, tags}) -> {Map.get(thread, "title"), tags} end)
     |> Stream.map(&IO.inspect(&1))
     |> Enum.take(20)
   end

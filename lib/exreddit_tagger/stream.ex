@@ -28,18 +28,17 @@ defmodule ExRedditTagger.Stream do
     {only_new_threads, thread_ids}
   end
 
-  defp filter_previous_threads(threads, previous_thread_ids) do
-    Enum.filter(threads, &is_new_thread(&1, previous_thread_ids))
-  end
-
   defp get_thread_ids(children) do
     Enum.map(children, &get_thread_id(&1))
   end
-
   defp get_thread_id(thread) do
     thread
     |> Map.get("data")
     |> Map.get("id")
+  end
+
+  defp filter_previous_threads(threads, previous_thread_ids) do
+    Enum.filter(threads, &is_new_thread(&1, previous_thread_ids))
   end
 
   defp is_new_thread(thread, previous_threads_ids) do
